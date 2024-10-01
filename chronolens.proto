@@ -1,5 +1,5 @@
 syntax = "proto3";
-package greeter;
+package chronolens;
 
 service ChronoLens {
   rpc Login (LoginRequest) returns (LoginResponse);
