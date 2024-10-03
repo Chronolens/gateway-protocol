@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: ChronoLens API
+  version: 1.0.0
+  description: API used to for client-server communication in ChronoLens
+
+paths:
+  /login:
+    post:
+      summary: Login to the ChronoLens service
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid username or password
+
+  /upload-image:
+    post:
+      summary: Upload an image to the ChronoLens service
+      operationId: uploadImage
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadImageRequest'
+      responses:
+        '200':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadImageResponse'
+        '400':
+          description: Invalid request or image format
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "user123"
+        password:
+          type: string
+          format: password
+          example: "securepassword"
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Authentication token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    UploadImageRequest:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/ImageInfo'
+        image:
+          type: string
+          format: binary
+          description: The image file to upload
+
+    ImageInfo:
+      type: object
+      properties:
+        filetype:
+          type: string
+          description: File type of the image (e.g., png, jpg)
+          example: "png"
+
+    UploadImageResponse:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: uint32
+          description: Size of the uploaded image in bytes
+          example: 2048
+
